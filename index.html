@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kairos ご提案 | プロジェクト進行管理システム構築</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Noto+Sans+JP:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B3A4B;
+    --navy-deep:#102531;
+    --paper:#ECEFE6;
+    --paper-dark:#DCE1D4;
+    --grid:#4F6B74;
+    --grid-light:#C9D2C6;
+    --amber:#D98E3F;
+    --teal:#2F7A6B;
+    --ink:#1C2B2E;
+    --white:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Noto Sans JP',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.8;
+    font-weight:400;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{
+    font-family:'Zen Kaku Gothic New',sans-serif;
+    font-weight:900;
+    color:var(--navy);
+    letter-spacing:0.02em;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{text-decoration:none;color:inherit;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 28px;}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    background:
+      linear-gradient(rgba(16,37,49,0.94),rgba(27,58,75,0.9)),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.06) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.06) 40px);
+    color:var(--paper);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:120px 28px 80px;
+  }
+  .hero-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.3em;
+    color:var(--amber);
+    border:1px solid rgba(217,142,63,0.5);
+    padding:8px 16px;
+    width:fit-content;
+    margin-bottom:36px;
+    background:rgba(217,142,63,0.07);
+  }
+  .hero-tag::before{
+    content:'';
+    width:7px;height:7px;
+    background:var(--amber);
+    border-radius:50%;
+    display:inline-block;
+    box-shadow:0 0 0 3px rgba(217,142,63,0.25);
+  }
+  .hero h1{
+    color:var(--white);
+    font-size:clamp(32px,5.2vw,62px);
+    line-height:1.35;
+    max-width:14ch;
+    margin-bottom:28px;
+  }
+  .hero h1 span{color:var(--amber);}
+  .hero p.lead{
+    max-width:560px;
+    color:#C7D4D2;
+    font-size:16px;
+    margin-bottom:56px;
+  }
+  .gantt-mock{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    max-width:620px;
+    border-top:1px solid rgba(255,255,255,0.15);
+    padding-top:28px;
+  }
+  .gantt-row{display:flex;align-items:center;gap:16px;}
+  .gantt-label{
+    width:110px;
+    flex-shrink:0;
+    font-size:12px;
+    font-family:'JetBrains Mono',monospace;
+    color:#9FB3B0;
+  }
+  .gantt-track{
+    flex:1;
+    height:10px;
+    background:rgba(255,255,255,0.08);
+    position:relative;
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .gantt-bar{
+    position:absolute;top:0;left:0;height:100%;
+    border-radius:2px;
+  }
+  .bar1{width:38%;background:var(--teal);}
+  .bar2{width:58%;background:var(--amber);left:20%;}
+  .bar3{width:30%;background:#5E8EA6;left:55%;}
+  .bar4{width:20%;background:rgba(255,255,255,0.25);left:80%;}
+
+  /* ===== SECTION BASE ===== */
+  section{padding:100px 0;}
+  .section-head{margin-bottom:60px;max-width:720px;}
+  .section-num{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--amber);
+    font-size:13px;
+    letter-spacing:0.25em;
+    margin-bottom:14px;
+    display:block;
+  }
+  .section-head h2{
+    font-size:clamp(24px,3.4vw,38px);
+    line-height:1.5;
+  }
+  .section-head p{
+    margin-top:18px;
+    color:#4A5A5C;
+    font-size:15px;
+  }
+
+  /* ===== UNDERSTANDING ===== */
+  .understand{
+    background:var(--navy);
+    color:var(--paper);
+  }
+  .understand .section-head h2{color:var(--white);}
+  .understand .section-head p{color:#B9CAC7;}
+  .board{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+  }
+  .sticky{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.12);
+    border-left:4px solid var(--amber);
+    padding:28px 24px;
+    font-size:14.5px;
+    color:#D7E0DD;
+  }
+  .sticky .mono{
+    display:block;
+    font-size:11px;
+    color:var(--amber);
+    margin-bottom:12px;
+    letter-spacing:0.15em;
+  }
+
+  /* ===== VALUE CARDS ===== */
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:24px;
+  }
+  .card{
+    background:var(--white);
+    border:1px solid var(--grid-light);
+    padding:32px 28px;
+    position:relative;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 30px -16px rgba(27,58,75,0.35);
+  }
+  .card .idx{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--teal);
+    letter-spacing:0.2em;
+    display:block;
+    margin-bottom:16px;
+  }
+  .card h3{
+    font-size:19px;
+    margin-bottom:12px;
+    color:var(--navy);
+  }
+  .card p{
+    font-size:14px;
+    color:#4A5A5C;
+  }
+  .card::after{
+    content:'';
+    position:absolute;
+    top:0;left:0;
+    width:4px;height:0;
+    background:var(--amber);
+    transition:height .25s ease;
+  }
+  .card:hover::after{height:100%;}
+
+  /* ===== SCHEDULE ===== */
+  .schedule{background:var(--paper-dark);}
+  .timeline{
+    position:relative;
+    padding-left:30px;
+    border-left:2px solid var(--grid);
+  }
+  .tl-item{
+    position:relative;
+    padding-bottom:46px;
+  }
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:'';
+    position:absolute;
+    left:-37px;top:2px;
+    width:14px;height:14px;
+    border-radius:50%;
+    background:var(--paper-dark);
+    border:3px solid var(--teal);
+  }
+  .tl-item.active::before{border-color:var(--amber);}
+  .tl-step{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--teal);
+    letter-spacing:0.2em;
+    margin-bottom:6px;
+    display:block;
+  }
+  .tl-item h4{
+    font-size:18px;
+    margin-bottom:6px;
+    color:var(--navy);
+  }
+  .tl-item p{
+    font-size:14px;
+    color:#4A5A5C;
+    max-width:600px;
+  }
+
+  /* ===== CLOSING ===== */
+  .closing{
+    background:
+      linear-gradient(rgba(16,37,49,0.95),rgba(16,37,49,0.95)),
+      repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 21px);
+    color:var(--white);
+    text-align:center;
+  }
+  .closing h2{
+    color:var(--white);
+    font-size:clamp(26px,4vw,42px);
+    margin-bottom:20px;
+  }
+  .closing p{
+    color:#C7D4D2;
+    max-width:560px;
+    margin:0 auto 40px;
+    font-size:15px;
+  }
+  .cta-btn{
+    display:inline-block;
+    background:var(--amber);
+    color:var(--navy-deep);
+    font-weight:700;
+    padding:18px 44px;
+    font-size:15px;
+    letter-spacing:0.05em;
+    border-radius:2px;
+    transition:transform .2s ease, background .2s ease;
+  }
+  .cta-btn:hover{
+    background:#F0A454;
+    transform:translateY(-3px);
+  }
+  .closing-meta{
+    margin-top:50px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:#7C9490;
+    letter-spacing:0.15em;
+  }
+
+  footer{
+    background:var(--navy-deep);
+    color:#6F8783;
+    text-align:center;
+    padding:28px;
+    font-size:12px;
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.1em;
+  }
+
+  @media (max-width:860px){
+    .board{grid-template-columns:1fr;}
+  }
+  @media (max-width:640px){
+    .hero{padding:100px 20px 60px;}
+    section{padding:70px 0;}
+    .gantt-label{width:80px;font-size:10.5px;}
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-tag">KAIROS PROPOSAL</div>
+    <h1>散らばった進行は、<br>ひとつの<span>設計図</span>になる。</h1>
+    <p class="lead">
+      予算・スケジュール・タスク・担当――バラバラに管理されていた情報を、
+      ひとつのシステムに統合します。Kairosより、本件「プロジェクト進行管理システム構築」へのご提案です。
+    </p>
+
+    <div class="gantt-mock">
+      <div class="gantt-row">
+        <div class="gantt-label mono">要件定義</div>
+        <div class="gantt-track"><div class="gantt-bar bar1"></div></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label mono">設計</div>
+        <div class="gantt-track"><div class="gantt-bar bar2"></div></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label mono">開発</div>
+        <div class="gantt-track"><div class="gantt-bar bar3"></div></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label mono">保守</div>
+        <div class="gantt-track"><div class="gantt-bar bar4"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="understand">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">01 / UNDERSTANDING</span>
+      <h2>「仕様はこれから」「言語もこれから」。<br>だからこそ、最初の一手が重要です。</h2>
+      <p>仕様書・デザインは相談しながら決めたい、フレームワークも未定——
+        裏を返せばこれは、現場の実態に合わせて最適な設計を選べる自由度の高いプロジェクトです。
+        私たちはこの“白紙の状態”こそ、AIを活用した要件定義で精度高くスタートを切るべき局面だと理解しています。</p>
+    </div>
+
+    <div class="board">
+      <div class="sticky">
+        <span class="mono">ISSUE_01</span>
+        予算・スケジュール・タスク・担当がそれぞれ別管理になっており、全体像の把握に時間がかかっている。
+      </div>
+      <div class="sticky">
+        <span class="mono">ISSUE_02</span>
+        仕様・デザインが未確定のため、要件定義フェーズの進め方そのものが成否を分ける。
+      </div>
+      <div class="sticky">
+        <span class="mono">ISSUE_03</span>
+        AIを活用した開発経験が重視される＝スピードと柔軟な設計対応力が求められている。
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="values">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num mono" style="color:var(--teal);">02 / WHAT WE PROVIDE</span>
+      <h2>Kairosがこのプロジェクトに提供する価値</h2>
+      <p>要件定義から保守運用まで、一気通貫で伴走します。</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <span class="idx">[ 01 ]</span>
+        <h3>AI活用による高速要件定義</h3>
+        <p>仕様未確定の状態からでも、AIを用いたヒアリング整理・機能設計のたたき台作成で、合意形成までのスピードを大幅に短縮します。</p>
+      </div>
+      <div class="card">
+        <span class="idx">[ 02 ]</span>
+        <h3>4軸管理の設計力</h3>
+        <p>予算管理・スケジュール管理・タスク管理・担当管理という4つの軸を、ひとつのデータモデルとして矛盾なく設計します。</p>
+      </div>
+      <div class="card">
+        <span class="idx">[ 03 ]</span>
+        <h3>最適なフレームワーク選定</h3>
+        <p>技術が未確定だからこそ、要件・保守性・将来の拡張性から逆算してフロント／バックエンド構成をご提案します。</p>
+      </div>
+      <div class="card">
+        <span class="idx">[ 04 ]</span>
+        <h3>フルスタック対応</h3>
+        <p>フロントエンド・バックエンド・インフラ接続（既存サーバー／ドメイン活用）まで一貫して対応可能です。</p>
+      </div>
+      <div class="card">
+        <span class="idx">[ 05 ]</span>
+        <h3>リリース後の保守・運用</h3>
+        <p>作って終わりにせず、運用フェーズでの改善要望・不具合対応まで継続して伴走します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="schedule">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num" style="color:var(--teal);">03 / PROCESS</span>
+      <h2>進め方のイメージ</h2>
+      <p>未確定事項が多い分、最初の打ち合わせで骨格を固めることを重視します。</p>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item active">
+        <span class="tl-step">STEP 00</span>
+        <h4>キックオフ打ち合わせ</h4>
+        <p>現状の管理方法・課題・優先したい機能（予算/スケジュール/タスク/担当）をヒアリングし、概算お見積りをご提示します。</p>
+      </div>
+      <div class="tl-item active">
+        <span class="tl-step">STEP 01</span>
+        <h4>要件定義・仕様策定</h4>
+        <p>AIを活用しつつ機能一覧・画面構成・データ設計のたたき台を作成。相談しながら仕様を確定させます。</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-step">STEP 02</span>
+        <h4>設計・画面デザイン</h4>
+        <p>フレームワーク選定、画面設計、UIデザインの方向性をすり合わせます。</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-step">STEP 03</span>
+        <h4>フロント・バックエンド開発</h4>
+        <p>既存のサーバー・ドメインを活用しながら実装を進行。進捗は都度共有します。</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-step">STEP 04</span>
+        <h4>テスト・リリース</h4>
+        <p>動作確認・修正を経て本番環境へ移行します。</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-step">STEP 05</span>
+        <h4>保守・運用</h4>
+        <p>リリース後も継続的な改善・不具合対応で運用をサポートします。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="wrap">
+    <h2>まずは、現状の整理から<br>ご一緒させてください。</h2>
+    <p>
+      簡単な自己紹介・実績・AI活用開発の経験をお伝えした上で、
+      お打ち合わせにて詳細をお伺いしながらお見積もりいたします。
+    </p>
+    <a href="#" class="cta-btn">Kairosに相談する</a>
+    <div class="closing-meta mono">PROPOSED BY KAIROS — WEB &amp; SYSTEM DEVELOPMENT TEAM</div>
+  </div>
+</section>
+
+<footer>
+  © KAIROS / PROJECT MANAGEMENT SYSTEM PROPOSAL
+</footer>
+
+</body>
+</html>
